@@ -1,5 +1,5 @@
 theGame
 =======
 
-The game met piemels &lt;3 made by floppydisk V2. 
+The game met bijna naakte bosses &lt;3 made by floppydisk V2. 
 :)
