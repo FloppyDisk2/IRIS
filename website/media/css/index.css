@@ -1,0 +1,87 @@
+@-webkit-keyframes bounce {
+  0% {
+    margin-top: 0px; }
+  50% {
+    margin-top: 10px; }
+  100% {
+    margin-top: 0px; } }
+@-moz-keyframes bounce {
+  0% {
+    margin-top: 0px; }
+  50% {
+    margin-top: 10px; }
+  100% {
+    margin-top: 0px; } }
+@keyframes bounce {
+  0% {
+    margin-top: 0px; }
+  50% {
+    margin-top: 10px; }
+  100% {
+    margin-top: 0px; } }
+body {
+  background-color: #073661; }
+
+#container {
+  padding-top: 50px;
+  background-image: url("../img/loginBackground.png");
+  width: 945px;
+  height: 656px;
+  margin: 0 auto; }
+  #container #char1 {
+    background-image: url("../img/characterLeft.png");
+    width: 336px;
+    height: 579px; }
+  #container .characterAni {
+    -webkit-animation: bounce 5s infinite;
+    -webkit-animation-timing-function: ease;
+    /* Chrome, Safari, Opera */
+    -moz-animation: bounce 5s infinite;
+    -moz-animation-timing-function: ease;
+    /* Chrome, Safari, Opera */ }
+  #container #containerChar1 {
+    float: left; }
+  #container #containerChar2 {
+    margin-top: 120px;
+    float: right;
+    margin-right: -14px; }
+  #container #char2 {
+    background-image: url("../img/characterRight.png");
+    width: 370px;
+    height: 358px; }
+  #container #loginScreen {
+    background-image: url("../img/containerBackground.png");
+    width: 252px;
+    height: 336px;
+    float: left;
+    padding-top: 80px; }
+    #container #loginScreen #logo {
+      background-image: url("../img/logo.png");
+      width: 110px;
+      height: 63px;
+      margin: 0 auto; }
+    #container #loginScreen form {
+      display: block;
+      width: 187px;
+      margin: 10px auto; }
+      #container #loginScreen form input {
+        background-image: none !important;
+        background-color: #f1ddb8;
+        width: 187px;
+        padding: 5px;
+        box-sizing: border-box;
+        border: 1px #edd3a3 solid;
+        height: 35px;
+        margin-top: 8px; }
+      #container #loginScreen form ::-webkit-input-placeholder {
+        color: #786e5c; }
+      #container #loginScreen form :-moz-placeholder {
+        color: #786e5c; }
+      #container #loginScreen form ::-moz-placeholder {
+        color: #786e5c; }
+      #container #loginScreen form :-ms-input-placeholder {
+        color: #786e5c; }
+      #container #loginScreen form #submit {
+        width: 70px; }
+
+/*# sourceMappingURL=index.css.map */
