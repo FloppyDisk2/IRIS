@@ -11,7 +11,6 @@
         	}
         </script>
         <script type="text/javascript" src="media/js/main.js"></script>
-          <script type="text/javascript" src="media/js/cssrefresh.js"></script>
     </head>
     <body class="nojs">
     	<div id="container">
