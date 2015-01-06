@@ -5,13 +5,25 @@
 interface button{
     installDom() : void;
 }
-
-class BackButton implements button{
-    private el : HTMLElement = null;
-    private parent : Boot;
+class buttonStandard{
+    protected parent : Boot;
+    protected aniTo : Screens;
     constructor(par : Boot){
         this.parent = par;
     }
+    protected click = (e : MouseEvent) : void => {
+        this.parent.switchScreen(this.aniTo, () : void =>{
+            this.parent.showBackButton();
+
+        }, () : void =>{
+            /* Error */
+        })
+    }
+}
+
+class BackButton extends buttonStandard implements button{
+    private el : HTMLElement = null;
+
 
     public installDom() : void{
         this.el = <HTMLElement> document.getElementById("returnButton");
@@ -23,28 +35,50 @@ class BackButton implements button{
         }
         this.el.style.display = "none";
     }
-    public show(){
+    public show(clickCallback : (Event) => void){
         if(this.el === null){
             this.installDom();
         }
+        document.getElementById("return").onclick = clickCallback;
         this.el.style.display = "block";
     }
 }
 
 
-class Login implements  button{
-    private clickEl : HTMLElement;
-    private parent : Boot;
-    constructor(par : Boot){
-        this.parent = par;
+class Login extends buttonStandard implements button{
+    constructor(par: Boot){
+        super(par);
+        this.aniTo = Screens.LOGIN;
+    }
+    private clickEl : NodeList;
+    public installDom() : void{
+        this.clickEl = document.getElementsByClassName('loginButton');
+        for(var i =0, len = this.clickEl.length; i < len; i++){
+            this.clickEl[i].addEventListener("click", this.click);
+        }
+    }
+
+}
+class Guest extends buttonStandard implements button{
+    private clickEl : NodeList;
+    constructor(par: Boot){
+        super(par);
+        this.aniTo = Screens.GUEST;
+    }
+    private installSecondButton = () : void => {
+        var clickEl : HTMLElement = <HTMLElement> document.getElementsByClassName('guestContinue')[0];
+        clickEl.addEventListener("click", () : void => {
+            window.location.href = "login.php?mode=guest";
+        });
     }
     public installDom() : void{
-        this.clickEl = <HTMLElement> document.getElementsByClassName('loginButton')[0];
-        this.clickEl.addEventListener("click", this.click);
+        this.installSecondButton();
+        this.clickEl = document.getElementsByClassName('guestButton');
+        for(var i =0, len = this.clickEl.length; i < len; i++){
+            this.clickEl[i].addEventListener("click", this.click);
+        }
     }
-    private click = (e : MouseEvent) : void => {
-        this.parent.showBackButton();
-    }
+
 }
 enum Screens {
     HOME,
@@ -53,28 +87,91 @@ enum Screens {
 }
 
 class Boot {
-    private buttons:Array<button> = [new Login(this)];
+    private buttons: Array<button> = [new Login(this), new Guest(this)];
     private backBut : BackButton = new BackButton(this);
     private currentScreen : Screens;
+    private isAni : boolean = false;
+    private currentId : string = null;
+    private previousId : string = null;
+    private aniDuration : number = 500;
 
     public constructor(){
         this.currentScreen = Screens.HOME;
+        this.currentId = "startContainer";
     }
 
     public showBackButton(){
-        this.backBut.show();
+        this.backBut.show((e : Event) : void => {
+            if(this.currentId !== null && this.currentId !== 'startContainer'){
+                this.animate('startContainer', ():void=>{}, true);
+            }
+            this.hideBackButton();
+        });
     }
 
     public hideBackButton(){
         this.backBut.hide();
     }
 
-    private isAni : boolean = false;
+    private animate(id : string, succes :() => void,  reverse: boolean = false){
+
+        if(this.isAni){
+            return;
+        }
+        this.isAni = true;
+        if(this.currentId !== null){
+            this.previousId = this.currentId;
+            document.getElementById(this.currentId).style.left = (reverse ? '-' : '') + '230px';
+            document.getElementById(this.currentId).classList.add('ani');
+        }
+
+        this.currentId = id;
+        if(reverse){
+            document.getElementById(id).classList.remove('inactive');
+            document.getElementById(id).style.left = '230px';
+        }
+        setTimeout(function(){
+            document.getElementById(id).classList.remove('inactive');
+            document.getElementById(id).classList.add('ani');
+            document.getElementById(id).style.left = '0px';
+        },10)
+
+
+        setTimeout(() => {
+            this.isAni = false;
+            if(this.previousId !== null){
+                document.getElementById(this.previousId).classList.add('inactive');
+                document.getElementById(this.previousId).classList.remove('ani');
+                document.getElementById(this.currentId).classList.remove('ani');
+                document.getElementById(this.previousId).style.left = '';
+            }
+            succes();
+        }, this.aniDuration+10);
+    }
+
+
     public switchScreen(name : Screens, succes :() => void, error :() => void): void{
+        console.log('switchScreen');
         if(this.isAni || this.currentScreen === name){
             error();
             return;
         }
+        var id : string;
+        switch(name){
+            case Screens.LOGIN:
+                    id = "loginContainer";
+                break;
+            case Screens.GUEST:
+                    id = "guestContainer";
+                break;
+            case Screens.HOME:
+                    id="startContainer";
+                break;
+            default :
+
+                return;
+        }
+        this.animate(id,succes);
 
     }
 

@@ -76,15 +76,20 @@ body {
         transform: rotate(-90deg);
         margin-right: 7.5px; }
       body #container #loginScreen #propContainer {
+        margin-left: 10px;
         overflow: hidden;
-        width: 240px;
+        width: 232px;
         height: 100%;
         position: relative; }
         body #container #loginScreen #propContainer .inactive {
-          left: 217px; }
+          visibility: hidden;
+          left: -230px !important; }
+        body #container #loginScreen #propContainer .ani {
+          transition: left .5s; }
         body #container #loginScreen #propContainer .containerProperties {
           position: absolute;
-          width: 252px; }
+          width: 232px;
+          left: 0px; }
         body #container #loginScreen #propContainer #loginContainer form {
           display: block;
           width: 187px;

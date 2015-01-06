@@ -33,8 +33,8 @@
                         <div id="startContainer" class="containerProperties ">
                             <div>
                                 <div class="button loginButton">Login </div>
-                                <div class="button" class="registerButton">Registreer <span class="outlinkRight"></div>
-                                <div class="button" class="guestButton">Play as guest</div>
+                                <div class="button registerButton">Registreer <span class="outlinkRight"></div>
+                                <div class="button guestButton">Play as guest</div>
                             </div>
 
                         </div>
@@ -44,7 +44,7 @@
                                 <span> Warning </span> 
                                 You are about to enter guest mode. In this mode, you can't save your progress. 
                             </p>
-                            <div class="button smallerText">Continue as guest</div>
+                            <div class="button smallerText guestContinue">Continue as guest</div>
                             <div class="button loginButton">Login </div>
                             </div>
                         </div>
