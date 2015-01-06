@@ -24,7 +24,6 @@ $outLinkIcon: "../img/outLinkIcon.png"; //icon voor een uitgaande link
   ::-moz-placeholder          {@content}
   :-ms-input-placeholder      {@content}  
 }
-
 @mixin keyframesP($ani) {
   @-webkit-keyframes #{$ani} {
     @content;
@@ -110,7 +109,7 @@ body {
 				background-image: url($returnButton);
 				width: 20px;
 				height: 20px;
-				display: inline-block;
+			`	display: inline-block;
 				transition: transform 0.5s, margin-right 0.5s;
 			}
 			#return:hover #returnButton{
@@ -206,7 +205,6 @@ body {
 					box-shadow: 0px 0px 20px white;					
 				}
 			}
-
 		}
 	}
 }

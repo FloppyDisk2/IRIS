@@ -11,6 +11,8 @@
         	}
         </script>
         <script type="text/javascript" src="media/js/main.js"></script>
+
+        <script type="text/javascript" src="media/js/cssrefresh.js"></script>
     </head>
     <body class="nojs">
     	<div id="container">
@@ -31,8 +33,8 @@
                         <div id="startContainer" class="containerProperties ">
                             <div>
                                 <div class="button loginButton">Login </div>
-                                <div class="button">Registreer <span class="outlinkRight"></div>
-                                <div class="button">Play as guest</div>
+                                <div class="button" class="registerButton">Registreer <span class="outlinkRight"></div>
+                                <div class="button" class="guestButton">Play as guest</div>
                             </div>
 
                         </div>
