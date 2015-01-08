@@ -12,7 +12,10 @@ var buttonStandard = (function () {
         var _this = this;
         this.click = function (e) {
             _this.parent.switchScreen(_this.aniTo, function () {
-                _this.parent.showBackButton();
+                _this.parent.backBut.show(function () {
+                    _this.parent.hideLoad();
+                    _this.parent.showBackButton();
+                });
             }, function () {
                 /* Error */
             });
@@ -52,7 +55,62 @@ var Login = (function (_super) {
         _super.call(this, par);
         this.aniTo = 1 /* LOGIN */;
     }
+    Login.prototype.installForm = function () {
+        var _this = this;
+        var loginForm = document.getElementById("loginForm");
+        loginForm.onsubmit = function (e) {
+            e.preventDefault();
+            loginForm.getElementsByTagName('p')[0].innerText = '';
+            var error = false;
+            for (var i = 0, len = loginForm.getElementsByTagName('input').length; i + 1 < len; i++) {
+                if (loginForm.getElementsByTagName('input')[i].value.length === 0) {
+                    error = true;
+                    loginForm.getElementsByTagName('input')[i].classList.add('error');
+                }
+                else {
+                    loginForm.getElementsByTagName('input')[i].classList.remove('error');
+                }
+            }
+            if (error) {
+                return;
+            }
+            _this.parent.showLoad();
+            _this.parent.backBut.hide();
+            var oReq = new XMLHttpRequest();
+            _this.parent.backBut.show(function () {
+                oReq.abort();
+                _this.parent.hideLoad();
+                _this.parent.hideBackButton();
+                _this.parent.showBackButton();
+            });
+            oReq.onreadystatechange = function () {
+                if (oReq.readyState == 4) {
+                    if (oReq.status == 200) {
+                        if (oReq.responseText !== 'Ok') {
+                            loginForm.getElementsByTagName('p')[0].innerText = "Ingevoerde data komt niet overeen met de database";
+                            _this.parent.hideLoad();
+                            _this.parent.hideBackButton();
+                            _this.parent.showBackButton();
+                        }
+                        else {
+                            window.location.href = "login.php?mode=user";
+                        }
+                    }
+                    else {
+                        loginForm.getElementsByTagName('p')[0].innerText = "Probeer het opnieuw";
+                        _this.parent.hideLoad();
+                        _this.parent.hideBackButton();
+                        _this.parent.showBackButton();
+                    }
+                }
+            };
+            oReq.open("post", "connectors/loginEntrance.php" + ((/\?/).test("connectors/loginEntrance.php") ? "&" : "?") + (new Date()).getTime(), true);
+            oReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+            oReq.send('gb=' + loginForm.getElementsByTagName('input')[0].value + '&ww=' + loginForm.getElementsByTagName('input')[1].value);
+        };
+    };
     Login.prototype.installDom = function () {
+        this.installForm();
         this.clickEl = document.getElementsByClassName('loginButton');
         for (var i = 0, len = this.clickEl.length; i < len; i++) {
             this.clickEl[i].addEventListener("click", this.click);
@@ -63,11 +121,36 @@ var Login = (function (_super) {
 var Guest = (function (_super) {
     __extends(Guest, _super);
     function Guest(par) {
+        var _this = this;
         _super.call(this, par);
         this.installSecondButton = function () {
             var clickEl = document.getElementsByClassName('guestContinue')[0];
             clickEl.addEventListener("click", function () {
-                window.location.href = "login.php?mode=guest";
+                _this.parent.showLoad();
+                _this.parent.backBut.hide();
+                var oReq = new XMLHttpRequest();
+                _this.parent.backBut.show(function () {
+                    oReq.abort();
+                    _this.parent.hideLoad();
+                    _this.parent.hideBackButton();
+                    _this.parent.showBackButton();
+                    document.getElementById('info').innerText = "";
+                });
+                oReq.onreadystatechange = function () {
+                    if (oReq.readyState == 4) {
+                        if (oReq.status == 200) {
+                            window.location.href = "login.php?mode=guest&code=" + oReq.responseText;
+                        }
+                        else {
+                            document.getElementById('info').innerText = "Probeer het opnieuw";
+                            _this.parent.hideLoad();
+                            _this.parent.hideBackButton();
+                            _this.parent.showBackButton();
+                        }
+                    }
+                };
+                oReq.open("post", "connectors/guestEntrance.php" + ((/\?/).test("connectors/guestEntrance.php") ? "&" : "?") + (new Date()).getTime(), true);
+                oReq.send();
             });
         };
         this.aniTo = 2 /* GUEST */;
@@ -110,6 +193,18 @@ var Boot = (function () {
     };
     Boot.prototype.hideBackButton = function () {
         this.backBut.hide();
+    };
+    Boot.prototype.showLoad = function () {
+        if (this.currentId !== null) {
+            document.getElementById(this.currentId).classList.add('inactive');
+        }
+        document.getElementById("loadContainer").classList.remove('inactive');
+    };
+    Boot.prototype.hideLoad = function () {
+        if (this.currentId !== null) {
+            document.getElementById(this.currentId).classList.remove('inactive');
+        }
+        document.getElementById("loadContainer").classList.add('inactive');
     };
     Boot.prototype.animate = function (id, succes, reverse) {
         var _this = this;
