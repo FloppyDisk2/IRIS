@@ -11,12 +11,12 @@ public class Shoot : MonoBehaviour {
 	// Use this for initialization
 	void Update () {
 		if (Input.GetMouseButtonDown(0)) {
-			Debug.Log("PANG");
+		//	Debug.Log("PANG");
 			RaycastHit hit;
 			Debug.DrawRay(Gun.position, Gun.forward*rayDist, Color.red, rayDuration, false);
 			
 			if (Physics.Raycast(Gun.position, Gun.forward, out hit)){
-				Debug.Log(hit.transform);
+		//		Debug.Log(hit.transform);
 				Instantiate(awesomePrefab,hit.point, Quaternion.identity);
 				
 				//			float distanceToGround = hit.distance;
