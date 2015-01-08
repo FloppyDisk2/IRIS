@@ -1,0 +1,212 @@
+fileFormatVersion: 2
+guid: 71d54e90285220140b29696cd278f57d
+ModelImporter:
+  serializedVersion: 16
+  fileIDToRecycleName:
+    100000: arena wall
+    100002: //RootNode
+    100004: back building
+    100006: big pilars
+    100008: big pillars big
+    100010: Box005
+    100012: Box025
+    100014: Box028
+    100016: corner houses
+    100018: Cylinder001
+    100020: door covers
+    100022: ground001
+    100024: leuning
+    100026: Object004
+    100028: Object005
+    100030: Object006
+    100032: Object007
+    100034: Object011
+    100036: Object012
+    100038: Object013
+    100040: Object014
+    100042: Object015
+    100044: Object016
+    100046: Object017
+    100048: Object018
+    100050: pedistal
+    100052: smal pilars
+    100054: smal pillars stairs
+    100056: stairs
+    100058: tower
+    100060: trap leuning
+    400000: arena wall
+    400002: //RootNode
+    400004: back building
+    400006: big pilars
+    400008: big pillars big
+    400010: Box005
+    400012: Box025
+    400014: Box028
+    400016: corner houses
+    400018: Cylinder001
+    400020: door covers
+    400022: ground001
+    400024: leuning
+    400026: Object004
+    400028: Object005
+    400030: Object006
+    400032: Object007
+    400034: Object011
+    400036: Object012
+    400038: Object013
+    400040: Object014
+    400042: Object015
+    400044: Object016
+    400046: Object017
+    400048: Object018
+    400050: pedistal
+    400052: smal pilars
+    400054: smal pillars stairs
+    400056: stairs
+    400058: tower
+    400060: trap leuning
+    2300000: arena wall
+    2300002: back building
+    2300004: big pilars
+    2300006: big pillars big
+    2300008: Box005
+    2300010: Box025
+    2300012: Box028
+    2300014: corner houses
+    2300016: Cylinder001
+    2300018: door covers
+    2300020: ground001
+    2300022: leuning
+    2300024: Object004
+    2300026: Object005
+    2300028: Object006
+    2300030: Object007
+    2300032: Object011
+    2300034: Object012
+    2300036: Object013
+    2300038: Object014
+    2300040: Object015
+    2300042: Object016
+    2300044: Object017
+    2300046: Object018
+    2300048: pedistal
+    2300050: smal pilars
+    2300052: smal pillars stairs
+    2300054: stairs
+    2300056: tower
+    2300058: trap leuning
+    3300000: arena wall
+    3300002: back building
+    3300004: big pilars
+    3300006: big pillars big
+    3300008: Box005
+    3300010: Box025
+    3300012: Box028
+    3300014: corner houses
+    3300016: Cylinder001
+    3300018: door covers
+    3300020: ground001
+    3300022: leuning
+    3300024: Object004
+    3300026: Object005
+    3300028: Object006
+    3300030: Object007
+    3300032: Object011
+    3300034: Object012
+    3300036: Object013
+    3300038: Object014
+    3300040: Object015
+    3300042: Object016
+    3300044: Object017
+    3300046: Object018
+    3300048: pedistal
+    3300050: smal pilars
+    3300052: smal pillars stairs
+    3300054: stairs
+    3300056: tower
+    3300058: trap leuning
+    4300000: arena wall
+    4300002: stairs
+    4300004: tower
+    4300006: back building
+    4300008: leuning
+    4300010: door covers
+    4300012: pedistal
+    4300014: trap leuning
+    4300016: big pilars
+    4300018: smal pilars
+    4300020: smal pillars stairs
+    4300022: big pillars big
+    4300024: Box005
+    4300026: corner houses
+    4300028: Object004
+    4300030: Object005
+    4300032: Object006
+    4300034: Object007
+    4300036: ground001
+    4300038: Box025
+    4300040: Object011
+    4300042: Object012
+    4300044: Object013
+    4300046: Object014
+    4300048: Object015
+    4300050: Object016
+    4300052: Box028
+    4300054: Cylinder001
+    4300056: Object017
+    4300058: Object018
+    9500000: //RootNode
+  materials:
+    importMaterials: 1
+    materialName: 0
+    materialSearch: 1
+  animations:
+    legacyGenerateAnimations: 4
+    bakeSimulation: 0
+    optimizeGameObjects: 0
+    motionNodeName: 
+    animationCompression: 1
+    animationRotationError: .5
+    animationPositionError: .5
+    animationScaleError: .5
+    animationWrapMode: 0
+    extraExposedTransformPaths: []
+    clipAnimations: []
+    isReadable: 1
+  meshes:
+    lODScreenPercentages: []
+    globalScale: 1
+    meshCompression: 0
+    addColliders: 0
+    importBlendShapes: 1
+    swapUVChannels: 0
+    generateSecondaryUV: 0
+    useFileUnits: 1
+    optimizeMeshForGPU: 1
+    weldVertices: 1
+    secondaryUVAngleDistortion: 8
+    secondaryUVAreaDistortion: 15.000001
+    secondaryUVHardAngle: 88
+    secondaryUVPackMargin: 4
+  tangentSpace:
+    normalSmoothAngle: 60
+    splitTangentsAcrossUV: 1
+    normalImportMode: 0
+    tangentImportMode: 1
+  importAnimation: 1
+  copyAvatar: 0
+  humanDescription:
+    human: []
+    skeleton: []
+    armTwist: .5
+    foreArmTwist: .5
+    upperLegTwist: .5
+    legTwist: .5
+    armStretch: .0500000007
+    legStretch: .0500000007
+    feetSpacing: 0
+    rootMotionBoneName: 
+  lastHumanDescriptionAvatarSource: {instanceID: 0}
+  animationType: 2
+  additionalBone: 0
+  userData: 
