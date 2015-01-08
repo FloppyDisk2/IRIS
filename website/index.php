@@ -18,10 +18,10 @@
                <div id="containerChar1">
                     <div id="char1" class="characterAni"></div>
                </div>
-               <div id="loginScreen" style="display:none">
+               <div id="loginScreen" style="">
                     <div id="logo">
                     </div>
-                    <div id="return"><div id="returnButton"></div> </div>
+                    <div class="return"><div id="returnButton"></div> </div>
                     <div id="propContainer">
                         <div id="noscriptContainer" class="containerProperties">
                             <div>
@@ -45,7 +45,7 @@
                             <b id="info"></b>
                             <p>
                                 <span> Warning </span> 
-                                You are about to enter guest mode. In this mode, you can't save your progress. 
+                                You are about to enter guest mode. In this mode, you can't get into the highscores. 
                             </p>
                             <div class="button smallerText guestContinue">Continue as guest</div>
                             <div class="button loginButton">Login </div>
@@ -61,21 +61,23 @@
                        </div>
                    </div>
                </div>
-               <div id="registerForm" style="display:block">
+               <div id="registerForm" style="display:none">
+               <div class ="return"><div id="returnButton"></div> </div>
                 <form>
                     <table>
-                        <tr> <td> Username </td><td><input type="text"></td><td>(At least 4 characters)</td></tr>
-                        <tr> <td> Password </td><td><input type="text"></td><td>(At least 6 characters)</td></tr>
-                        <tr> <td> Confirm password </td><td><input type="password"></td></tr>
-                        <tr> <td> E-mail </td><td><input type="text"></td></tr>
-                        <tr> <td> Address </td><td><input type="text"></td></tr>
-                        <tr> <td> Country </td><td><input type="text"></td></tr>
+                        <tr> <td> * Username </td><td><input type="text" autocomplete="name"></td></tr>
+                        <tr> <td> * Password </td><td><input type="password"></td></tr>
+                        <tr> <td> * Confirm password </td><td><input type="password"></td></tr>
+                        <tr> <td> * E-mail </td><td><input type="text" autocomplete="email"></td></tr>
+                        <tr> <td> Address </td><td><input type="text" autocomplete="address-line1"></td></tr>
+                        <tr> <td> Country </td><td><input type="text" autocomplete="country"></td></tr>
+                        <tr><td><span> * Is Required. </span></td><td><input type="submit" value="submit"></td></tr>
                     </table>
-                    <span> * Is Required. </span>
-                    <input type="submit" value="submit">
+                    
                 </form>
                </div>
-               <div id="containerChar2">
+               <div id="containerChar2" class="containerChar2UN">
+
                     <div id="char2" class="characterAni"></div>
                </div>
         </div>

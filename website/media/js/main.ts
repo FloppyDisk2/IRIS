@@ -1,6 +1,112 @@
 /**
  * Created by carlotheunissen on 17-12-14.
  */
+class RegisterForm{
+    private element : HTMLElement;
+    private form : HTMLElement;
+    private backBut : BackButton;
+    private onhide : () => void;
+    constructor(backBut : BackButton){
+        this.backBut = backBut;
+        this.element = document.getElementById("registerForm");
+        this.form = this.element.getElementsByTagName('form')[0];
+    }
+    public setOnhide(callback : () => void){
+        this.onhide = callback;
+    }
+    public submitData(succes : () => void, username : string, password : string, email : string,   address : string = '', country: string = '') : void{
+        var oReq = new XMLHttpRequest();
+        oReq.onreadystatechange = () => {
+            if (oReq.readyState == 4) {
+                if (oReq.status == 200) {
+                    if(oReq.responseText === 'Ok') {
+                        alert('je bent geregistreerd!');
+                        succes();
+                    } else {
+                        alert(oReq.responseText);
+                    }
+
+                } else {
+                    /*internet error*/
+                }
+            }
+        };
+        oReq.open("post", "connectors/createUser.php" + ((/\?/).test("connectors/createUser.php") ? "&" : "?") + (new Date()).getTime(), true);
+        oReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        var send : String = 'username='+username+'&password='+password+'&email='+email;
+        if(address.trim() !== ''){
+            send += "&address="+address;
+        }
+        if(country.trim() !== ''){
+            send += "&country="+country;
+        }
+
+        oReq.send(send);
+
+    }
+
+    public show() : void{
+        this.element.style.display = "block";
+        this.backBut.hide();
+        this.backBut.show((E : Event) => {
+            console.log('ja');
+            this.backBut.hide();
+            this.hide();
+        })
+      //  this.form.requestAutocomplete();
+        this.form.onsubmit = (e : Event) => {
+            e.preventDefault();
+            var formData : NodeList = this.form.getElementsByTagName('input');
+
+            var username : string = (<HTMLInputElement> formData[0]).value,
+                password : string = (<HTMLInputElement> formData[1]).value,
+                repassword : string = (<HTMLInputElement> formData[2]).value,
+                email : string = (<HTMLInputElement> formData[3]).value,
+                address : string = (<HTMLInputElement> formData[4]).value,
+                country : string = (<HTMLInputElement> formData[5]).value;
+
+            var error : boolean = false;
+            for(var i = 0; i <= 3; i++){
+                var out : HTMLInputElement = <HTMLInputElement> formData[i];
+                if(out.value.trim() === ''){
+                    out.classList.add("error");
+                    error = true;
+                }
+            }
+            if(password.trim() !== '' && repassword.trim() !== '' && repassword !== password){
+                (<HTMLInputElement> formData[2]).classList.add("error");
+                (<HTMLInputElement> formData[1]).classList.add("error");
+                error = true;
+            }
+            var re : RegExp = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)\b/;
+            if(!re.test(email)){
+                console.log(email);
+                error = true;
+                (<HTMLInputElement> formData[3]).classList.add("error");
+            }
+            if(error){
+                return;
+            }
+
+            this.submitData(() => {
+
+                for(var i = 0; i <= 3; i++){
+                    var out : HTMLInputElement = <HTMLInputElement> formData[i];
+                    out.value = '';
+                }
+                this.hide();
+            },username, password,email,address,country);
+        }
+
+    }
+
+    public hide() : void{
+        this.form.onsubmit = null;
+        this.element.style.display = "none";
+        if(this.onhide !== null)
+        this.onhide();
+    }
+}
 
 interface button{
     installDom() : void;
@@ -25,29 +131,51 @@ class buttonStandard{
 }
 
 class BackButton extends buttonStandard implements button{
-    private el : HTMLElement = null;
+    private el : NodeList = null;
 
 
     public installDom() : void{
-        this.el = <HTMLElement> document.getElementById("returnButton");
+        this.el = document.getElementsByClassName("return");
         this.hide();
     }
     public hide(){
         if(this.el === null){
             this.installDom();
         }
-        this.el.style.display = "none";
+        for(var i = 0, len = this.el.length; i < len; i++){
+            (<HTMLElement>this.el[i]).style.display = "none";
+        }
+
     }
     public show(clickCallback : (Event) => void){
         if(this.el === null){
             this.installDom();
         }
-        document.getElementById("return").onclick = clickCallback;
-        this.el.style.display = "block";
+        for(var i = 0, len = this.el.length; i < len; i++){
+            console.log(i);
+            (<HTMLElement>this.el[i]).style.display = "block";
+            (<HTMLElement>this.el[i]).onclick = clickCallback
+        }
     }
 }
 
+class RegisterButton extends buttonStandard implements button {
+    private el : HTMLElement;
+    private form : RegisterForm;
 
+
+    public installDom() : void{
+        this.form = new RegisterForm(this.parent.backBut);
+        this.form.setOnhide(() => {
+            this.parent.showContainer();
+        });
+        this.el = <HTMLElement> document.getElementsByClassName("registerButton")[0];
+        this.el.addEventListener("click", (E : Event) :void => {
+            this.parent.hideContainer();
+            this.form.show();
+        });
+    }
+}
 class Login extends buttonStandard implements button{
     constructor(par: Boot){
         super(par);
@@ -166,19 +294,26 @@ enum Screens {
 }
 
 class Boot {
-    private buttons: Array<button> = [new Login(this), new Guest(this)];
+    private buttons: Array<button> = [new Login(this), new Guest(this), new RegisterButton(this)];
     public backBut : BackButton = new BackButton(this);
     private currentScreen : Screens;
     private isAni : boolean = false;
     private currentId : string = null;
     private previousId : string = null;
     private aniDuration : number = 500;
-
+    private registerForm : RegisterForm = null;
     public constructor(){
         this.currentScreen = Screens.HOME;
         this.currentId = "startContainer";
-    }
 
+    }
+    public hideContainer(){
+        document.getElementById("loginScreen").style.display = "none";
+    }
+    public showContainer(){
+        document.getElementById("loginScreen").style.display = "block";
+
+    }
     public showBackButton(){
         this.backBut.show((e : Event) : void => {
             if(this.currentId !== null && this.currentId !== 'startContainer'){
@@ -268,10 +403,10 @@ class Boot {
     public start():void {
         Boot.call(this.backBut);
         this.installDom();
+
     }
 
     public installDom():void {
-
         for (var i in this.buttons) {
             Boot.call( this.buttons[i] );
         }

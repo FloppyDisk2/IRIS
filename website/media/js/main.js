@@ -1,12 +1,104 @@
-/**
- * Created by carlotheunissen on 17-12-14.
- */
 var __extends = this.__extends || function (d, b) {
     for (var p in b) if (b.hasOwnProperty(p)) d[p] = b[p];
     function __() { this.constructor = d; }
     __.prototype = b.prototype;
     d.prototype = new __();
 };
+/**
+ * Created by carlotheunissen on 17-12-14.
+ */
+var RegisterForm = (function () {
+    function RegisterForm(backBut) {
+        this.backBut = backBut;
+        this.element = document.getElementById("registerForm");
+        this.form = this.element.getElementsByTagName('form')[0];
+    }
+    RegisterForm.prototype.setOnhide = function (callback) {
+        this.onhide = callback;
+    };
+    RegisterForm.prototype.submitData = function (succes, username, password, email, address, country) {
+        if (address === void 0) { address = ''; }
+        if (country === void 0) { country = ''; }
+        var oReq = new XMLHttpRequest();
+        oReq.onreadystatechange = function () {
+            if (oReq.readyState == 4) {
+                if (oReq.status == 200) {
+                    if (oReq.responseText === 'Ok') {
+                        alert('je bent geregistreerd!');
+                        succes();
+                    }
+                    else {
+                        alert(oReq.responseText);
+                    }
+                }
+                else {
+                }
+            }
+        };
+        oReq.open("post", "connectors/createUser.php" + ((/\?/).test("connectors/createUser.php") ? "&" : "?") + (new Date()).getTime(), true);
+        oReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
+        var send = 'username=' + username + '&password=' + password + '&email=' + email;
+        if (address.trim() !== '') {
+            send += "&address=" + address;
+        }
+        if (country.trim() !== '') {
+            send += "&country=" + country;
+        }
+        oReq.send(send);
+    };
+    RegisterForm.prototype.show = function () {
+        var _this = this;
+        this.element.style.display = "block";
+        this.backBut.hide();
+        this.backBut.show(function (E) {
+            console.log('ja');
+            _this.backBut.hide();
+            _this.hide();
+        });
+        //  this.form.requestAutocomplete();
+        this.form.onsubmit = function (e) {
+            e.preventDefault();
+            var formData = _this.form.getElementsByTagName('input');
+            var username = formData[0].value, password = formData[1].value, repassword = formData[2].value, email = formData[3].value, address = formData[4].value, country = formData[5].value;
+            var error = false;
+            for (var i = 0; i <= 3; i++) {
+                var out = formData[i];
+                if (out.value.trim() === '') {
+                    out.classList.add("error");
+                    error = true;
+                }
+            }
+            if (password.trim() !== '' && repassword.trim() !== '' && repassword !== password) {
+                formData[2].classList.add("error");
+                formData[1].classList.add("error");
+                error = true;
+            }
+            var re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)\b/;
+            if (!re.test(email)) {
+                console.log(email);
+                error = true;
+                formData[3].classList.add("error");
+            }
+            if (error) {
+                return;
+            }
+            _this.submitData(function () {
+                for (var i = 0; i <= 3; i++) {
+                    var out = formData[i];
+                    out.value = '';
+                }
+                _this.hide();
+            }, username, password, email, address, country);
+        };
+    };
+    RegisterForm.prototype.hide = function () {
+        this.form.onsubmit = null;
+        this.element.style.display = "none";
+        if (this.onhide !== null)
+            this.onhide();
+    };
+    return RegisterForm;
+})();
 var buttonStandard = (function () {
     function buttonStandard(par) {
         var _this = this;
@@ -31,23 +123,47 @@ var BackButton = (function (_super) {
         this.el = null;
     }
     BackButton.prototype.installDom = function () {
-        this.el = document.getElementById("returnButton");
+        this.el = document.getElementsByClassName("return");
         this.hide();
     };
     BackButton.prototype.hide = function () {
         if (this.el === null) {
             this.installDom();
         }
-        this.el.style.display = "none";
+        for (var i = 0, len = this.el.length; i < len; i++) {
+            this.el[i].style.display = "none";
+        }
     };
     BackButton.prototype.show = function (clickCallback) {
         if (this.el === null) {
             this.installDom();
         }
-        document.getElementById("return").onclick = clickCallback;
-        this.el.style.display = "block";
+        for (var i = 0, len = this.el.length; i < len; i++) {
+            console.log(i);
+            this.el[i].style.display = "block";
+            this.el[i].onclick = clickCallback;
+        }
     };
     return BackButton;
+})(buttonStandard);
+var RegisterButton = (function (_super) {
+    __extends(RegisterButton, _super);
+    function RegisterButton() {
+        _super.apply(this, arguments);
+    }
+    RegisterButton.prototype.installDom = function () {
+        var _this = this;
+        this.form = new RegisterForm(this.parent.backBut);
+        this.form.setOnhide(function () {
+            _this.parent.showContainer();
+        });
+        this.el = document.getElementsByClassName("registerButton")[0];
+        this.el.addEventListener("click", function (E) {
+            _this.parent.hideContainer();
+            _this.form.show();
+        });
+    };
+    return RegisterButton;
 })(buttonStandard);
 var Login = (function (_super) {
     __extends(Login, _super);
@@ -172,15 +288,22 @@ var Screens;
 })(Screens || (Screens = {}));
 var Boot = (function () {
     function Boot() {
-        this.buttons = [new Login(this), new Guest(this)];
+        this.buttons = [new Login(this), new Guest(this), new RegisterButton(this)];
         this.backBut = new BackButton(this);
         this.isAni = false;
         this.currentId = null;
         this.previousId = null;
         this.aniDuration = 500;
+        this.registerForm = null;
         this.currentScreen = 0 /* HOME */;
         this.currentId = "startContainer";
     }
+    Boot.prototype.hideContainer = function () {
+        document.getElementById("loginScreen").style.display = "none";
+    };
+    Boot.prototype.showContainer = function () {
+        document.getElementById("loginScreen").style.display = "block";
+    };
     Boot.prototype.showBackButton = function () {
         var _this = this;
         this.backBut.show(function (e) {

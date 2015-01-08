@@ -1,0 +1,19 @@
+<?php
+if(isset($_GET['username'], $_GET['password'],$_GET['email'])){
+	$_GET['address'] = isset($_GET['address']) ? $_GET['address'] : null;
+	$_GET['country'] = isset($_GET['country']) ? $_GET['country'] : null;
+	global $pdo;
+	$sth = $pdo->prepare("INSERT INTO Users ( `name`, `password`, email, `address`, country, `created`, `lastactiontime`) VALUES ( :username, :password, :email, :address, :country, CURRENT_TIMESTAMP, CURRENT_TIMESTAMP)");
+	$sth->bindparam(':username', $_GET['username']);
+	$sth->bindparam(':password', $_GET['password']);
+	$sth->bindparam(':email', $_GET['email']);
+	$sth->bindparam(':address', $_GET['address']);
+	$sth->bindparam(':country', $_GET['country']);
+	try{
+		$sth->execute();
+		echo 'Ok';
+	} catch(Exception $e){
+		echo 'Error';
+	}
+}
+echo 'Error';

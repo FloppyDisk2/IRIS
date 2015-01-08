@@ -21,12 +21,36 @@
     margin-top: 0px; } }
 body {
   background-color: #073661; }
+  body .error {
+    border-left: 3px red solid; }
+  body input {
+    background-image: none !important;
+    background-color: #f1ddb8;
+    padding: 5px;
+    box-sizing: border-box;
+    border: 1px #edd3a3 solid; }
   body #container {
+    position: relative;
     padding-top: 50px;
     background-image: url("../img/loginBackground.png");
     width: 945px;
     height: 656px;
     margin: 0 auto; }
+    body #container .return {
+      position: absolute;
+      top: 70px;
+      right: 25px;
+      cursor: pointer;
+      vertical-align: top; }
+    body #container #returnButton {
+      background-image: url("../img/close.png");
+      width: 20px;
+      height: 20px;
+      display: inline-block;
+      transition: transform 0.5s, margin-right 0.5s; }
+    body #container .return:hover #returnButton {
+      transform: rotate(-90deg);
+      margin-right: 7.5px; }
     body #container .characterAni {
       -webkit-animation: bounce 3s infinite;
       -webkit-animation-timing-function: ease;
@@ -40,6 +64,10 @@ body {
         background-image: url("../img/characterLeft.png");
         width: 336px;
         height: 579px; }
+    body #container .containerChar2UN {
+      position: absolute;
+      right: 0;
+      margin-top: 0px !important; }
     body #container #containerChar2 {
       margin-top: 120px;
       float: right;
@@ -50,10 +78,20 @@ body {
         height: 358px; }
     body #container #registerForm {
       background-image: url("../img/registerBackground.png");
-      width: 500px;
-      height: 328px;
+      width: 600px;
+      height: 394px;
       position: relative;
-      float: left; }
+      float: left;
+      margin-left: -185px;
+      z-index: 2; }
+      body #container #registerForm table {
+        width: 410px;
+        margin: 88px auto; }
+      body #container #registerForm span {
+        font-size: 10px; }
+      body #container #registerForm .return {
+        top: 30px;
+        right: 85px; }
     body #container #loginScreen {
       position: relative;
       background-image: url("../img/containerBackground.png");
@@ -66,21 +104,6 @@ body {
         width: 110px;
         height: 63px;
         margin: 0 auto; }
-      body #container #loginScreen #return {
-        position: absolute;
-        top: 70px;
-        right: 25px;
-        cursor: pointer;
-        vertical-align: top; }
-      body #container #loginScreen #returnButton {
-        background-image: url("../img/close.png");
-        width: 20px;
-        height: 20px;
-        display: inline-block;
-        transition: transform 0.5s, margin-right 0.5s; }
-      body #container #loginScreen #return:hover #returnButton {
-        transform: rotate(-90deg);
-        margin-right: 7.5px; }
       body #container #loginScreen #propContainer {
         margin-left: 10px;
         overflow: hidden;
@@ -105,15 +128,8 @@ body {
           display: block;
           width: 187px;
           margin: 10px auto; }
-          body #container #loginScreen #propContainer #loginContainer form .error {
-            border-left: 3px red solid; }
           body #container #loginScreen #propContainer #loginContainer form input {
-            background-image: none !important;
-            background-color: #f1ddb8;
             width: 187px;
-            padding: 5px;
-            box-sizing: border-box;
-            border: 1px #edd3a3 solid;
             height: 35px;
             margin-top: 8px; }
           body #container #loginScreen #propContainer #loginContainer form ::-webkit-input-placeholder {
