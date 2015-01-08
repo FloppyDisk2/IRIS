@@ -83,6 +83,13 @@ body {
 				height: 358px;
 			} 
 		}
+	  #registerForm{
+		background-image: url("../img/registerBackground.png");
+		width: 500px;
+		height: 328px;
+		position: relative;
+		float: left;
+	  }
 		#loginScreen{
 			$loginWidth: 232px;
 			position: relative;
@@ -135,10 +142,19 @@ body {
 					width: $loginWidth;
 				  left: 0px;
 				}
+			  	#loadContainer div{
+				  background-image: url("../img/load.gif");
+				  width: 48px;
+				  height: 48px;
+				  margin: 40px auto;
+				}
 				#loginContainer form{
 					display: block;
 					width: 187px;
 					margin: 10px auto;
+				  .error{
+					border-left: 3px red solid;
+				  }
 					input{
 						background-image: none !important;
 						background-color: $inputBackground;
