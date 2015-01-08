@@ -48,12 +48,6 @@ body {
         background-image: url("../img/characterRight.png");
         width: 370px;
         height: 358px; }
-    body #container #registerForm {
-      background-image: url("../img/registerBackground.png");
-      width: 500px;
-      height: 328px;
-      position: relative;
-      float: left; }
     body #container #loginScreen {
       position: relative;
       background-image: url("../img/containerBackground.png");
@@ -96,17 +90,10 @@ body {
           position: absolute;
           width: 232px;
           left: 0px; }
-        body #container #loginScreen #propContainer #loadContainer div {
-          background-image: url("../img/load.gif");
-          width: 48px;
-          height: 48px;
-          margin: 40px auto; }
         body #container #loginScreen #propContainer #loginContainer form {
           display: block;
           width: 187px;
           margin: 10px auto; }
-          body #container #loginScreen #propContainer #loginContainer form .error {
-            border-left: 3px red solid; }
           body #container #loginScreen #propContainer #loginContainer form input {
             background-image: none !important;
             background-color: #f1ddb8;

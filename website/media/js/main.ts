@@ -13,10 +13,7 @@ class buttonStandard{
     }
     protected click = (e : MouseEvent) : void => {
         this.parent.switchScreen(this.aniTo, () : void =>{
-            this.parent.backBut.show(() : void =>{
-                this.parent.hideLoad();
-                this.parent.showBackButton();
-            });
+            this.parent.showBackButton();
 
         }, () : void =>{
             /* Error */
@@ -54,60 +51,7 @@ class Login extends buttonStandard implements button{
         this.aniTo = Screens.LOGIN;
     }
     private clickEl : NodeList;
-    private installForm() : void{
-        var loginForm : HTMLElement = <HTMLElement> document.getElementById("loginForm");
-        loginForm.onsubmit = (e : Event) => {
-            e.preventDefault();
-            loginForm.getElementsByTagName('p')[0].innerText = '';
-            var error : boolean = false;
-            for(var i : number = 0, len : number = loginForm.getElementsByTagName('input').length; i+1 < len; i++ ){
-                if(loginForm.getElementsByTagName('input')[i].value.length === 0){
-                    error = true;
-                    loginForm.getElementsByTagName('input')[i].classList.add('error');
-                } else {
-                    loginForm.getElementsByTagName('input')[i].classList.remove('error');
-                }
-            }
-            if(error){
-                return;
-            }
-
-            this.parent.showLoad();
-            this.parent.backBut.hide();
-            var oReq = new XMLHttpRequest();
-            this.parent.backBut.show((): void =>{
-                oReq.abort();
-                this.parent.hideLoad();
-                this.parent.hideBackButton();
-                this.parent.showBackButton();
-            });
-            oReq.onreadystatechange = () => {
-                if (oReq.readyState == 4) {
-                    if (oReq.status == 200) {
-                        if(oReq.responseText !== 'Ok'){
-                            loginForm.getElementsByTagName('p')[0].innerText = "Ingevoerde data komt niet overeen met de database";
-                            this.parent.hideLoad();
-                            this.parent.hideBackButton();
-                            this.parent.showBackButton();
-                        } else {
-                            window.location.href = "login.php?mode=user";
-                        }
-
-                    } else {
-                        loginForm.getElementsByTagName('p')[0].innerText = "Probeer het opnieuw";
-                        this.parent.hideLoad();
-                        this.parent.hideBackButton();
-                        this.parent.showBackButton();
-                    }
-                }
-            };
-            oReq.open("post", "connectors/loginEntrance.php" + ((/\?/).test("connectors/loginEntrance.php") ? "&" : "?") + (new Date()).getTime(), true);
-            oReq.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
-            oReq.send('gb=' + loginForm.getElementsByTagName('input')[0].value + '&ww=' + loginForm.getElementsByTagName('input')[1].value);
-        };
-    }
     public installDom() : void{
-        this.installForm();
         this.clickEl = document.getElementsByClassName('loginButton');
         for(var i =0, len = this.clickEl.length; i < len; i++){
             this.clickEl[i].addEventListener("click", this.click);
@@ -124,30 +68,7 @@ class Guest extends buttonStandard implements button{
     private installSecondButton = () : void => {
         var clickEl : HTMLElement = <HTMLElement> document.getElementsByClassName('guestContinue')[0];
         clickEl.addEventListener("click", () : void => {
-            this.parent.showLoad();
-            this.parent.backBut.hide();
-            var oReq = new XMLHttpRequest();
-            this.parent.backBut.show((): void =>{
-                oReq.abort();
-                this.parent.hideLoad();
-                this.parent.hideBackButton();
-                this.parent.showBackButton();
-                document.getElementById('info').innerText = "";
-            });
-            oReq.onreadystatechange = () => {
-                if (oReq.readyState == 4) {
-                    if (oReq.status == 200) {
-                        window.location.href = "login.php?mode=guest&code="+oReq.responseText;
-                    } else {
-                        document.getElementById('info').innerText = "Probeer het opnieuw";
-                        this.parent.hideLoad();
-                        this.parent.hideBackButton();
-                        this.parent.showBackButton();
-                    }
-                }
-            };
-            oReq.open("post", "connectors/guestEntrance.php" + ((/\?/).test("connectors/guestEntrance.php") ? "&" : "?") + (new Date()).getTime(), true);
-            oReq.send();
+            window.location.href = "login.php?mode=guest";
         });
     }
     public installDom() : void{
@@ -167,7 +88,7 @@ enum Screens {
 
 class Boot {
     private buttons: Array<button> = [new Login(this), new Guest(this)];
-    public backBut : BackButton = new BackButton(this);
+    private backBut : BackButton = new BackButton(this);
     private currentScreen : Screens;
     private isAni : boolean = false;
     private currentId : string = null;
@@ -191,18 +112,7 @@ class Boot {
     public hideBackButton(){
         this.backBut.hide();
     }
-    public showLoad() {
-        if(this.currentId !== null) {
-            document.getElementById(this.currentId).classList.add('inactive');
-        }
-        document.getElementById("loadContainer").classList.remove('inactive');
-    }
-    public hideLoad(){
-        if(this.currentId !== null) {
-            document.getElementById(this.currentId).classList.remove('inactive');
-        }
-        document.getElementById("loadContainer").classList.add('inactive');
-    }
+
     private animate(id : string, succes :() => void,  reverse: boolean = false){
 
         if(this.isAni){
