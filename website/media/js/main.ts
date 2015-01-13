@@ -1,6 +1,35 @@
 /**
  * Created by carlotheunissen on 17-12-14.
  */
+class InfoBox{
+    private static element : HTMLElement = null;
+    private static backbut : BackButton = null;
+    private static checkElement() : void{
+        this.element = this.element === null ? document.getElementById("infoBox") : this.element;
+    }
+    public static showInfoBox(backbut : BackButton) : void{
+        this.backbut = backbut;
+        this.checkElement();
+        this.element.style.display = 'block';
+        backbut.hide();
+        var timer = setTimeout(() => {
+            this.hide()
+        }, 2000);
+        backbut.show((E : Event) => {
+            clearTimeout(timer);
+            this.hide();
+        });
+
+    }
+    public static hide(){
+        if(this.backbut !== null){
+            this.backbut.hide();
+            this.backbut = null;
+        }
+        this.element.style.display = 'none';
+
+    }
+}
 class RegisterForm{
     private element : HTMLElement;
     private form : HTMLElement;
@@ -14,16 +43,37 @@ class RegisterForm{
     public setOnhide(callback : () => void){
         this.onhide = callback;
     }
-    public submitData(succes : () => void, username : string, password : string, email : string,   address : string = '', country: string = '') : void{
+    private clean() : void {
+
+    }
+    private submitData(succes : () => void, username : string, password : string, email : string,   address : string = '', country: string = '') : void{
+
         var oReq = new XMLHttpRequest();
         oReq.onreadystatechange = () => {
             if (oReq.readyState == 4) {
                 if (oReq.status == 200) {
-                    if(oReq.responseText === 'Ok') {
-                        alert('je bent geregistreerd!');
-                        succes();
-                    } else {
-                        alert(oReq.responseText);
+                    var json : any = JSON.parse(oReq.responseText);
+                    if(json.succes){
+                        InfoBox.showInfoBox(this.backBut);
+                        this.hide();
+
+                    }
+                    var formData : NodeList = this.form.getElementsByTagName('input');
+                    for(var i : number = 0, len = json.error.length; i<len; i++){
+                        switch(json.error[i]){
+                            case 'general':
+                                alert('Unknow error');
+                                return;
+                                break;
+                            case 'nameError':
+                                (<HTMLInputElement>  (<HTMLInputElement> formData[0].parentNode).getElementsByClassName('error')[0]).innerText = "This username is already taken";
+                                (<HTMLInputElement> formData[0]).classList.add("error");
+                                break;
+                            case 'emailError':
+                                (<HTMLInputElement> formData[3]).classList.add("error");
+                                (<HTMLInputElement>  (<HTMLInputElement> formData[3].parentNode).getElementsByClassName('error')[0]).innerText = "This email address has already 2 accounts.";
+                                break;
+                        }
                     }
 
                 } else {
@@ -71,17 +121,33 @@ class RegisterForm{
                 if(out.value.trim() === ''){
                     out.classList.add("error");
                     error = true;
+                } else {
+                    (<HTMLInputElement> formData[i]).classList.remove("error");
                 }
+                (<HTMLInputElement>  (<HTMLInputElement> formData[i].parentNode).getElementsByClassName('error')[0]).innerText = "";
+
+            }
+            if(password.trim() !== '' && username.trim().length < 4){
+                (<HTMLInputElement> formData[0]).classList.add("error");
+                (<HTMLInputElement>  (<HTMLInputElement> formData[0].parentNode).getElementsByClassName('error')[0]).innerText = "Username is too short. Min. 4 characters";
+                error = true;
+            }
+            if(password.trim() !== '' && password.trim().length < 6){
+                (<HTMLInputElement> formData[1]).classList.add("error");
+                (<HTMLInputElement>  (<HTMLInputElement> formData[1].parentNode).getElementsByClassName('error')[0]).innerText = "Password is too short. Min. 6 characters";
+                error = true;
             }
             if(password.trim() !== '' && repassword.trim() !== '' && repassword !== password){
                 (<HTMLInputElement> formData[2]).classList.add("error");
                 (<HTMLInputElement> formData[1]).classList.add("error");
+                (<HTMLInputElement>  (<HTMLInputElement> formData[2].parentNode).getElementsByClassName('error')[0]).innerText = "The passwords are different";
                 error = true;
             }
             var re : RegExp = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)\b/;
-            if(!re.test(email)){
+            if(email.trim() !== '' && !re.test(email)){
                 console.log(email);
                 error = true;
+                (<HTMLInputElement>  (<HTMLInputElement> formData[3].parentNode).getElementsByClassName('error')[0]).innerText = "Invalid :(";
                 (<HTMLInputElement> formData[3]).classList.add("error");
             }
             if(error){
@@ -103,6 +169,7 @@ class RegisterForm{
     public hide() : void{
         this.form.onsubmit = null;
         this.element.style.display = "none";
+        this.backBut.hide();
         if(this.onhide !== null)
         this.onhide();
     }
@@ -152,7 +219,6 @@ class BackButton extends buttonStandard implements button{
             this.installDom();
         }
         for(var i = 0, len = this.el.length; i < len; i++){
-            console.log(i);
             (<HTMLElement>this.el[i]).style.display = "block";
             (<HTMLElement>this.el[i]).onclick = clickCallback
         }
@@ -421,4 +487,10 @@ window.onload = function() : void {
     var test:HTMLBodyElement = <HTMLBodyElement> document.body;
     test.className = "js";
     insals.start();
+   var t =  document.getElementById("registerForm").getElementsByTagName("input");
+    for(var i = 0, len = t.length; i < len; i++){
+        t[i].addEventListener("keyup", function(){
+            this.style.fontSize = Math.max(16 - Math.floor(this.value.length / 17) * 2, 12) + "px";
+        });
+    }
 };

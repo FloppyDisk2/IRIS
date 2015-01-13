@@ -1,5 +1,6 @@
 <?php
 session_start();
+header('Content-Type: text/html; charset=utf-8');
 if(isset($_POST['gb'], $_POST['ww'])){
 	include('../config/config.php');
 	global $pdo;
@@ -16,6 +17,6 @@ if(isset($_POST['gb'], $_POST['ww'])){
 	} else {
 		echo 'Error';
 	}
-	return;
+	exit;
 }
 echo 'Error';

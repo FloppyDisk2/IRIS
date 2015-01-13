@@ -65,10 +65,11 @@
                <div class ="return"><div id="returnButton"></div> </div>
                 <form>
                     <table>
-                        <tr> <td> * Username </td><td><input type="text" autocomplete="name"></td></tr>
-                        <tr> <td> * Password </td><td><input type="password"></td></tr>
-                        <tr> <td> * Confirm password </td><td><input type="password"></td></tr>
-                        <tr> <td> * E-mail </td><td><input type="text" autocomplete="email"></td></tr>
+                        <tr> <td> * Username </td><td><span class="error"></span><input type="text" autocomplete="name"></td></tr>
+                        <tr> <td> * Password </td><td><span class="error"></span>
+                        <input type="password"></td></tr>
+                        <tr> <td> * Confirm password </td><td><span class="error"></span><input type="password"></td></tr>
+                        <tr> <td> * E-mail </td><td><span class="error"></span><input type="text" autocomplete="email"></td></tr>
                         <tr> <td> Address </td><td><input type="text" autocomplete="address-line1"></td></tr>
                         <tr> <td> Country </td><td><input type="text" autocomplete="country"></td></tr>
                         <tr><td><span> * Is Required. </span></td><td><input type="submit" value="submit"></td></tr>
@@ -80,6 +81,14 @@
 
                     <div id="char2" class="characterAni"></div>
                </div>
+
+               <div id="infoBox" style="display:none">
+                <div class ="return" ><div id="returnButton"></div> </div>
+                <span>You are succesfully registerd!</span>
+                <p>If you want to get your highscores listed, you have to validate your email address. <br />
+                We have sended you a email. </p>
+               </div>
         </div>
+        <sound src="media/sound/loginBg.mp3" autoplay loop preload ></sound>
     </body>
 </html>

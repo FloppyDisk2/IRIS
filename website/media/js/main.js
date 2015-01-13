@@ -7,6 +7,37 @@ var __extends = this.__extends || function (d, b) {
 /**
  * Created by carlotheunissen on 17-12-14.
  */
+var InfoBox = (function () {
+    function InfoBox() {
+    }
+    InfoBox.checkElement = function () {
+        this.element = this.element === null ? document.getElementById("infoBox") : this.element;
+    };
+    InfoBox.showInfoBox = function (backbut) {
+        var _this = this;
+        this.backbut = backbut;
+        this.checkElement();
+        this.element.style.display = 'block';
+        backbut.hide();
+        var timer = setTimeout(function () {
+            _this.hide();
+        }, 2000);
+        backbut.show(function (E) {
+            clearTimeout(timer);
+            _this.hide();
+        });
+    };
+    InfoBox.hide = function () {
+        if (this.backbut !== null) {
+            this.backbut.hide();
+            this.backbut = null;
+        }
+        this.element.style.display = 'none';
+    };
+    InfoBox.element = null;
+    InfoBox.backbut = null;
+    return InfoBox;
+})();
 var RegisterForm = (function () {
     function RegisterForm(backBut) {
         this.backBut = backBut;
@@ -16,19 +47,37 @@ var RegisterForm = (function () {
     RegisterForm.prototype.setOnhide = function (callback) {
         this.onhide = callback;
     };
+    RegisterForm.prototype.clean = function () {
+    };
     RegisterForm.prototype.submitData = function (succes, username, password, email, address, country) {
+        var _this = this;
         if (address === void 0) { address = ''; }
         if (country === void 0) { country = ''; }
         var oReq = new XMLHttpRequest();
         oReq.onreadystatechange = function () {
             if (oReq.readyState == 4) {
                 if (oReq.status == 200) {
-                    if (oReq.responseText === 'Ok') {
-                        alert('je bent geregistreerd!');
-                        succes();
+                    var json = JSON.parse(oReq.responseText);
+                    if (json.succes) {
+                        InfoBox.showInfoBox(_this.backBut);
+                        _this.hide();
                     }
-                    else {
-                        alert(oReq.responseText);
+                    var formData = _this.form.getElementsByTagName('input');
+                    for (var i = 0, len = json.error.length; i < len; i++) {
+                        switch (json.error[i]) {
+                            case 'general':
+                                alert('Unknow error');
+                                return;
+                                break;
+                            case 'nameError':
+                                formData[0].parentNode.getElementsByClassName('error')[0].innerText = "This username is already taken";
+                                formData[0].classList.add("error");
+                                break;
+                            case 'emailError':
+                                formData[3].classList.add("error");
+                                formData[3].parentNode.getElementsByClassName('error')[0].innerText = "This email address has already 2 accounts.";
+                                break;
+                        }
                     }
                 }
                 else {
@@ -67,16 +116,32 @@ var RegisterForm = (function () {
                     out.classList.add("error");
                     error = true;
                 }
+                else {
+                    formData[i].classList.remove("error");
+                }
+                formData[i].parentNode.getElementsByClassName('error')[0].innerText = "";
+            }
+            if (password.trim() !== '' && username.trim().length < 4) {
+                formData[0].classList.add("error");
+                formData[0].parentNode.getElementsByClassName('error')[0].innerText = "Username is too short. Min. 4 characters";
+                error = true;
+            }
+            if (password.trim() !== '' && password.trim().length < 6) {
+                formData[1].classList.add("error");
+                formData[1].parentNode.getElementsByClassName('error')[0].innerText = "Password is too short. Min. 6 characters";
+                error = true;
             }
             if (password.trim() !== '' && repassword.trim() !== '' && repassword !== password) {
                 formData[2].classList.add("error");
                 formData[1].classList.add("error");
+                formData[2].parentNode.getElementsByClassName('error')[0].innerText = "The passwords are different";
                 error = true;
             }
             var re = /[a-z0-9!#$%&'*+/=?^_`{|}~-]+(?:\.[a-z0-9!#$%&'*+/=?^_`{|}~-]+)*@(?:[a-z0-9](?:[a-z0-9-]*[a-z0-9])?\.)+(?:[A-Z]{2}|com|org|net|edu|gov|mil|biz|info|mobi|name|aero|asia|jobs|museum)\b/;
-            if (!re.test(email)) {
+            if (email.trim() !== '' && !re.test(email)) {
                 console.log(email);
                 error = true;
+                formData[3].parentNode.getElementsByClassName('error')[0].innerText = "Invalid :(";
                 formData[3].classList.add("error");
             }
             if (error) {
@@ -94,6 +159,7 @@ var RegisterForm = (function () {
     RegisterForm.prototype.hide = function () {
         this.form.onsubmit = null;
         this.element.style.display = "none";
+        this.backBut.hide();
         if (this.onhide !== null)
             this.onhide();
     };
@@ -139,7 +205,6 @@ var BackButton = (function (_super) {
             this.installDom();
         }
         for (var i = 0, len = this.el.length; i < len; i++) {
-            console.log(i);
             this.el[i].style.display = "block";
             this.el[i].onclick = clickCallback;
         }
@@ -403,5 +468,11 @@ window.onload = function () {
     var test = document.body;
     test.className = "js";
     insals.start();
+    var t = document.getElementById("registerForm").getElementsByTagName("input");
+    for (var i = 0, len = t.length; i < len; i++) {
+        t[i].addEventListener("keyup", function () {
+            this.style.fontSize = Math.max(16 - Math.floor(this.value.length / 17) * 2, 12) + "px";
+        });
+    }
 };
 //# sourceMappingURL=main.js.map

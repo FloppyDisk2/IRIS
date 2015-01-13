@@ -28,7 +28,9 @@ body {
     background-color: #f1ddb8;
     padding: 5px;
     box-sizing: border-box;
-    border: 1px #edd3a3 solid; }
+    border: 1px #edd3a3 solid;
+    width: 221px;
+    height: 32px; }
   body #container {
     position: relative;
     padding-top: 50px;
@@ -92,6 +94,11 @@ body {
       body #container #registerForm .return {
         top: 30px;
         right: 85px; }
+      body #container #registerForm td span {
+        color: #832a2a;
+        padding-left: 10px;
+        border: 0;
+        display: block; }
     body #container #loginScreen {
       position: relative;
       background-image: url("../img/containerBackground.png");
@@ -180,6 +187,21 @@ body {
           -moz-box-shadow: 0px 0px 10px white;
           -webkit-box-shadow: 0px 0px 10px white;
           box-shadow: 0px 0px 20px white; }
+  body #infoBox {
+    position: absolute;
+    width: 230px;
+    top: 140px;
+    border: 2px green solid;
+    background-color: #ffe99c;
+    padding: 10px;
+    left: 50%;
+    margin-left: -140px; }
+    body #infoBox .return {
+      display: block !important;
+      top: 2px;
+      right: 5px; }
+    body #infoBox span {
+      font-size: 30px; }
 
 .nojs #loginContainer, .nojs #startContainer, .nojs #startContainer, .nojs #returnButton, .js #noscriptContainer div {
   display: none !important; }
